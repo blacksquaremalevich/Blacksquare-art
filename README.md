@@ -1,3 +1,5 @@
-# BlackSquare-Space - OBEY!
+# BlackSquare - OBEY!
 
-https://blacksquare-1.gitbook.io/blacksquare/
+Enter the BlackSquare Space: https://www.blacksquare.art/
+
+Read all about my Project: https://blacksquare-1.gitbook.io/blacksquare/
