@@ -291,19 +291,15 @@ contract BlackSquareNFT is ERC721, Ownable, ERC2981ContractWideRoyalties {
         for (uint256 tokenId = 0; tokenId < _editions[editionId].tokens.length; tokenId++ ) {
             uint256 currentToken = _editions[editionId].tokens[tokenId];
 
-            // Normal update where cycle is > 1, Up to the normal rewardPerPeriod was paid out & There is a stored reward >= 0
             if (_ownersReward[currentToken][editionCycle].rewardPaid <= (rewardPerCycle / 10000) && editionCycle > 1 && _ownersReward[currentToken][editionCycle - 1].rewardStored >= 0) {
                 _ownersReward[currentToken][editionCycle].rewardStored =  (rewardPerCycle / 10000) -  _ownersReward[currentToken][editionCycle].rewardPaid + _ownersReward[currentToken][editionCycle - 1].rewardStored;
 
-            // We are in Cycle one, so there is no previously stored reward. Now everything gets stored which is a positive amount or 0
             } else if (_ownersReward[currentToken][editionCycle].rewardPaid <= (rewardPerCycle / 10000) && editionCycle == 1) {
                 _ownersReward[currentToken][editionCycle].rewardStored = (rewardPerCycle / 10000) -  _ownersReward[currentToken][editionCycle].rewardPaid;
 
-            // In case due to some rounding errors etc. RewardPaid > Reward, Only Stored Reward is carried over if Cycle > 1 and Stored Reward is bigger than 0
             } else if (_ownersReward[currentToken][editionCycle].rewardPaid > (rewardPerCycle / 10000) && editionCycle > 1 && _ownersReward[currentToken][editionCycle - 1].rewardStored > 0) {
                 _ownersReward[currentToken][editionCycle].rewardStored = _ownersReward[currentToken][editionCycle - 1].rewardStored;
 
-            // Handle the Edge Cases
             } else {
                 _ownersReward[currentToken][editionCycle].rewardStored = 0;
             }
@@ -348,7 +344,6 @@ contract BlackSquareNFT is ERC721, Ownable, ERC2981ContractWideRoyalties {
         uint256 rewardPaid = _ownersReward[tokenId][cycle].rewardPaid > 0 ? _ownersReward[tokenId][cycle].rewardPaid : 0;
         uint256 rewardStoredPrev = cycle > 1 ? _ownersReward[tokenId][previousCycle].rewardStored : 0;
 
-        // We are in the normal distribution Cycle
         if (lastUpdateTimestamp < illuminationTimeStamp && block.timestamp < illuminationTimeStamp && block.timestamp > lastUpdateTimestamp) {
             uint256 rewardPerSecond = rewardPerCycle / (illuminationTimeStamp - lastUpdateTimestamp);
 
@@ -357,12 +352,12 @@ contract BlackSquareNFT is ERC721, Ownable, ERC2981ContractWideRoyalties {
             uint256 returnableAmount = rewardPayableFromCycle >= 1 ? rewardPayableFromCycle + rewardStoredPrev : rewardStoredPrev;
 
             return (returnableAmount, cycle, rewardStoredPrev);
-        // We are outside the normal cycle, during time of Illumina sale
+
         } else if (lastUpdateTimestamp < illuminationTimeStamp && block.timestamp > illuminationTimeStamp && block.timestamp > lastUpdateTimestamp) {
 
             uint256 returnableAmount = rewardStoredPrev + (rewardPerCycle / 10000) - rewardPaid;
             return (returnableAmount, cycle, rewardStoredPrev);
-        // Handle all edge cases
+
         } else {
             return (rewardStoredPrev, cycle, rewardStoredPrev);
         }
