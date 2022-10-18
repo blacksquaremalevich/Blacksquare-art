@@ -4,7 +4,7 @@ Enter The Blacksquare: https://www.blacksquare.art/
 
 Read All About My Project: https://blacksquare-1.gitbook.io/blacksquare/
 
-Here are the Contract Addresses which were deployed to the Ethereum Mainninet:
+Here are the respective Contract Addresses on the Ethereum Mainnnet:
 
 OBY: 0x1768312bD4e292375B0321a0998d27f5E80b5091
 
