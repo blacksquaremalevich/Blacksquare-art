@@ -19,7 +19,6 @@ contract OBYTransfer_V2 {
 
     bool public claimable;
 
-    mapping(uint256 => bool) private _claimedInCycle;
     mapping(address => bool) private _eligibles;
     mapping (uint256 => bool) private _claimed;
 
